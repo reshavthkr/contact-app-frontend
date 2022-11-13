@@ -21,7 +21,7 @@ export default function MessagesDetails() {
     }
     useEffect(() => {
         fetchMessageDetails()
-    }, [])
+    })
 
     return (
 

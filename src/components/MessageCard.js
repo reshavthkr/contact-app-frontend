@@ -9,7 +9,7 @@ export default function MessageCard({ name, time, id, otp }) {
     }
     useEffect(() => {
         convertDate()
-    }, [])
+    })
 
     return (
 

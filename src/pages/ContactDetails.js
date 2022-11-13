@@ -15,7 +15,7 @@ export default function ContactDetails() {
     const params = useParams()
     const { id } = params
     const getItem = (id) => {
-        let item = data.contacts.filter(item => item.id == id)
+        let item = data.contacts.filter(item => item.id === id)
         setcontactDetails(item[0])
     }
     const messageText = (e) => {
@@ -80,7 +80,7 @@ export default function ContactDetails() {
     }
     useEffect(() => {
         getItem(id)
-    }, [])
+    })
 
 
 
