@@ -22,7 +22,6 @@ export default function ContactDetails() {
         setmessage(message => {
             return e.target.value
         })
-        console.log(message)
     }
     const fetchOTP = async () => {
         try {
@@ -30,7 +29,7 @@ export default function ContactDetails() {
             const data = await response.json()
             if (data.otp) {
                 setotpValue(data.otp)
-                setmessage(`Hi. Your OTP is: ${data.otp} `)
+                setmessage(`Hi. Your OTP is: ${data.otp}. `)
             }
 
         }
@@ -43,6 +42,42 @@ export default function ContactDetails() {
         await fetchOTP()
         setsendingMessage(true)
     }
+    const deliverMessage = async () => {
+        try {
+            if (otpValue && message) {
+                if (message.includes(`Hi. Your OTP is: ${otpValue}.`)) {
+                    const response = await fetch('http://localhost:8080/api/sendSMS', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: contactDetails.firstName + contactDetails.lastName,
+                            otp: otpValue,
+                            message: message,
+                            phoneNo: contactDetails.phone
+                        })
+                    });
+                    const data = await response.json()
+                    if (data.status) {
+                        toast.error("Oops! Something went wrong")
+                    }
+                    else {
+                        toast.success("Woohoo! Message sent successfuly")
+                        setsendingMessage(false)
+                    }
+
+
+                }
+                else toast.error("Oops! It seems that you had deleted the default message. Please refresh and try again ")
+
+            }
+            else {
+                toast.warning("Please enter the message")
+            }
+        }
+        catch (err) {
+
+        }
+    }
     useEffect(() => {
         getItem(id)
     }, [])
@@ -51,7 +86,7 @@ export default function ContactDetails() {
 
     return (
         <>
-            <div className='flex justify-between ' >
+            <div className='flex justify-between flex-col md:flex-row ' >
                 <ToastContainer
                     position="top-right"
                     autoClose={5000}
@@ -66,14 +101,14 @@ export default function ContactDetails() {
                 />
                 <Navbar />
 
-                <div className='bg-background h-screen w-8/12 p-10 flex justify-center items-center flex-col  overflow-scroll'>
-                    <div className='p-8 bg-background2 w-3/4 flex rounded-lg '>
+                <div className='bg-background h-screen md:w-8/12 w-screen md:p-10 p-1 pt-20  flex md:justify-center justify-start  items-center flex-col  overflow-scroll'>
+                    <div className='md:p-8 p-4 bg-background2 md:w-3/4 w-11/12 flex rounded-lg md:flex-row flex-col justify-center items-center'>
                         {contactDetails ?
                             <>
                                 <div className='h-52 w-52 rounded-full bg-secondary flex justify-center items-center border-text-green border-2'>
                                     <img className='w-40' alt='Profile pic' src={`https://robohash.org/${id}?set=set4`} />
                                 </div>
-                                <div className='ml-14'>
+                                <div className='md:ml-14 my-4 md:my-0'>
                                     <div className='text-white text-3xl uppercase tracking-wider font-extrabold '>{contactDetails.firstName} {contactDetails.lastName}</div>
                                     <div className='text-white text-xl mt-4'><span className='text-dull'>Phone No: </span>{contactDetails.phone}</div>
                                     <div className='text-white text-xl'> <span className='text-dull'>Email:</span> {contactDetails.email}</div>
@@ -81,7 +116,7 @@ export default function ContactDetails() {
                                         sendingMessage ?
                                             <>
                                                 <textarea onChange={messageText} name="message" value={message} className='my-8 w-64 h-44 p-2 rounded-md bg-background text-white focus:border-btn-color focus:outline-btn-color'></textarea>
-                                                <div className='bg-btn-color text-white h-10 w-64 flex justify-center cursor-pointer items-center  rounded-md'>Send </div>
+                                                <div onClick={deliverMessage} className='bg-btn-color text-white h-10 w-64 flex justify-center cursor-pointer items-center  rounded-md'>Send </div>
                                             </> :
                                             <div onClick={sendMessage} className='bg-btn-color text-white h-10 w-52 flex justify-center cursor-pointer items-center my-8 rounded-md'>Send Message</div>
 
