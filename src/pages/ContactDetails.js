@@ -25,7 +25,7 @@ export default function ContactDetails() {
     }
     const fetchOTP = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/generateOTP');
+            const response = await fetch('https://contact-app-backend-production.up.railway.app/api/generateOTP');
             const data = await response.json()
             if (data.otp) {
                 setotpValue(data.otp)
@@ -46,7 +46,7 @@ export default function ContactDetails() {
         try {
             if (otpValue && message) {
                 if (message.includes(`Hi. Your OTP is: ${otpValue}.`)) {
-                    const response = await fetch('http://localhost:8080/api/sendSMS', {
+                    const response = await fetch('https://contact-app-backend-production.up.railway.app/api/sendSMS', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({

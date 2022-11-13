@@ -12,7 +12,7 @@ export default function MessagesDetails() {
 
     const fetchMessageDetails = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/getSMS/${id}`)
+            const response = await fetch(`https://contact-app-backend-production.up.railway.app/api/getSMS/${id}`)
             const data = await response.json()
             setmessageD(data.message)
         } catch (err) {

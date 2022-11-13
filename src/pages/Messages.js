@@ -6,7 +6,7 @@ export default function Messages() {
     const [messagDetail, setmessagDetail] = useState()
 
     const fetchMessages = async () => {
-        const response = await fetch('http://localhost:8080/api/getSMS');
+        const response = await fetch('https://contact-app-backend-production.up.railway.app/api/getSMS');
         const data = await response.json()
         setmessagDetail(data.messages)
     }
