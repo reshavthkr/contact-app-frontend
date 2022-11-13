@@ -1,11 +1,15 @@
-import { fireEvent } from '@testing-library/react'
+
+import { ToastContainer, toast } from 'react-toastify';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import data from '../contact.json'
 
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function ContactDetails() {
     const [contactDetails, setcontactDetails] = useState()
+    const [otpValue, setotpValue] = useState()
     const [message, setmessage] = useState()
     const [sendingMessage, setsendingMessage] = useState(false)
     const params = useParams()
@@ -20,18 +24,24 @@ export default function ContactDetails() {
         })
         console.log(message)
     }
-    const sendMessage = async () => {
-        setsendingMessage(true)
-        let otp = await generateOTP()
-        console.log(otp)
-        setmessage(`Hi. Your OTP is: ${otp} `)
-        console.log(message)
+    const fetchOTP = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/api/generateOTP');
+            const data = await response.json()
+            if (data.otp) {
+                setotpValue(data.otp)
+                setmessage(`Hi. Your OTP is: ${data.otp} `)
+            }
+
+        }
+        catch (err) {
+            toast.error(`${err}`);
+        }
+
     }
-    const generateOTP = () => {
-        let min = 100000;
-        let max = 999999
-        let otp = Math.floor(Math.random() * (max - min + 1) + min)
-        return otp
+    const sendMessage = async () => {
+        await fetchOTP()
+        setsendingMessage(true)
     }
     useEffect(() => {
         getItem(id)
@@ -42,6 +52,18 @@ export default function ContactDetails() {
     return (
         <>
             <div className='flex justify-between ' >
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="dark"
+                />
                 <Navbar />
 
                 <div className='bg-background h-screen w-8/12 p-10 flex justify-center items-center flex-col  overflow-scroll'>
