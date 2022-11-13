@@ -5,6 +5,7 @@ import MessageCard from '../components/MessageCard'
 export default function Messages() {
     const [messagDetail, setmessagDetail] = useState()
 
+    //---- fetching Messages--------//
     const fetchMessages = async () => {
         const response = await fetch('https://contact-app-backend-production.up.railway.app/api/getSMS');
         const data = await response.json()

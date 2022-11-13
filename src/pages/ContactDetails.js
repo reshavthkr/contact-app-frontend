@@ -14,15 +14,21 @@ export default function ContactDetails() {
     const [sendingMessage, setsendingMessage] = useState(false)
     const params = useParams()
     const { id } = params
+
+    //---- function for fetching specific user--------//
     const getItem = (id) => {
         let item = data.contacts.filter(item => item.id === id)
         setcontactDetails(item[0])
     }
+
+    //---- On changing the text value--------//
     const messageText = (e) => {
         setmessage(message => {
             return e.target.value
         })
     }
+
+    //---- getting otp form backend--------//
     const fetchOTP = async () => {
         try {
             const response = await fetch('https://contact-app-backend-production.up.railway.app/api/generateOTP');
@@ -38,14 +44,16 @@ export default function ContactDetails() {
         }
 
     }
+
     const sendMessage = async () => {
         await fetchOTP()
         setsendingMessage(true)
     }
+    //---- function for sending the message --------//
     const deliverMessage = async () => {
         try {
-            if (otpValue && message) {
-                if (message.includes(`Hi. Your OTP is: ${otpValue}.`)) {
+            if (otpValue && message) { //checking if value are empty or not
+                if (message.includes(`Hi. Your OTP is: ${otpValue}.`)) { //checking whether the default message is deleted
                     const response = await fetch('https://contact-app-backend-production.up.railway.app/api/sendSMS', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -64,8 +72,6 @@ export default function ContactDetails() {
                         toast.success("Woohoo! Message sent successfuly")
                         setsendingMessage(false)
                     }
-
-
                 }
                 else toast.error("Oops! It seems that you had deleted the default message. Please refresh and try again ")
 
@@ -81,8 +87,6 @@ export default function ContactDetails() {
     useEffect(() => {
         getItem(id)
     })
-
-
 
     return (
         <>

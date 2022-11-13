@@ -10,6 +10,7 @@ export default function MessagesDetails() {
     const params = useParams()
     const { id } = params
 
+    //---- fetching single message detail--------//
     const fetchMessageDetails = async () => {
         try {
             const response = await fetch(`https://contact-app-backend-production.up.railway.app/api/getSMS/${id}`)
