@@ -46,7 +46,7 @@ export default function MessagesDetails() {
                         <div className='md:ml-14 ml-0'>
                             <div className='text-white text-3xl uppercase tracking-wider font-extrabold '>{messgaeD.name}</div>
                             <div className='text-white text-xl mt-4'><span className='text-dull'>Message: </span>{messgaeD.message}</div>
-                            <div className='text-white text-xl'> <span className='text-dull'>Email:</span> {messgaeD.phoneNo}</div>
+                            <div className='text-white text-xl'> <span className='text-dull'>Phone No.:</span> {messgaeD.phoneNo}</div>
                             <div className='text-btn-color text-xl'> <span className='text-dull'>OTP:</span> {messgaeD.otp}</div>
                             <div className='text-white text-xl'> <span className='text-dull'>Sent On:</span> {messgaeD.time}</div>
 
